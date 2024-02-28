@@ -35,4 +35,41 @@ class DictionaryWord(Form):
 
 class ConsultDict(Form):
     palabraConsult=StringField('Palabra a consultar')
-    options=RadioField('',choices=[(0,'Ingles'),(1,'Español')]);
+    options=RadioField('',choices=[(0,'Ingles'),(1,'Español')])
+    
+
+class UserForm2(Form):
+    id=IntegerField('id')
+    nombre=StringField('nombre',[
+        validators.DataRequired(message='El campo es requerido'),
+        validators.length(min=4,max=10,message='Ingresa nombre valido')
+    ])
+    apaterno=StringField('apaterno',[
+        validators.DataRequired(message='El campo es requerido'),
+        validators.length(min=4,max=10,message='Ingresa Apellido paterno valido')
+    ])
+    email=EmailField('correo',[
+        validators.Email(message='Ingresa edad valida')
+    ])
+
+class EmpleadosForm(Form):
+    nombre=StringField('nombre',[
+        validators.DataRequired(message='El campo es requerido'),
+        validators.length(min=4,max=10,message='Ingresa nombre valido')
+    ])
+    email=EmailField('email',[
+        validators.Email(message='Ingresa edad valida')
+    ])
+    telefono=IntegerField('telefono',[
+        validators.DataRequired(message='El campo es requerido'),
+        validators.number_range(min=1,max=20,message='Ingresa edad valida')
+    ])
+    direccion=StringField('direccion',[
+        validators.DataRequired(message='El campo es requerido'),
+        validators.length(min=4,max=10,message='Ingresa nombre valido')
+    ])
+    sueldo=IntegerField('sueldo',[
+        validators.DataRequired(message='El campo es requerido'),
+        validators.number_range(min=1,max=20,message='Ingresa edad valida')
+    ])
+    

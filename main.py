@@ -15,12 +15,22 @@ app.config.from_object(DevelopmentConfig)
 csrf=CSRFProtect()
 app.secret_key='esta es la clave secreta'
 
-@app.route("/index")
+@app.route("/index",methods=["GET","POST"])
 def index():
-    g.nombre='Daniel'
-    escuela="UTL!!!"
-    alumnos=["Mario","Pedro","Luis","Dario"]
-    return render_template("index.html",escuela=escuela,alumnos=alumnos)
+    alum_form=forms.UserForm2(request.form)
+    if request.method=='POST':
+        alum=Alumnos(nombre=alum_form.nombre.data,
+                     apaterno=alum_form.apaterno.data,
+                     email=alum_form.email.data)
+        db.session.add(alum)
+        db.session.commit()
+    return render_template("index.html",form=alum_form)
+
+@app.route("/ABC_Completo",methods=["GET","POST"])
+def ABC_Completo():
+    alum_form=forms.UserForm2(request.form)
+    alumnos=Alumnos.query.all()
+    return render_template("ABC_Completo.html",alumnos=alumnos)
 
 #Funcion que nos permite manejar el error 404 y mandar lo que queramos con el html
 @app.errorhandler(404)
