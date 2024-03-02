@@ -26,6 +26,47 @@ def index():
         db.session.commit()
     return render_template("index.html",form=alum_form)
 
+@app.route("/eliminar",methods=["GET","POST"])
+def eliminar():
+    alumn_form=forms.UserForm2(request.form)
+    if request.method=='GET':
+        id=request.args.get('id')
+        alum1=db.session.query(Alumnos).filter(Alumnos.id==id).first()
+        alumn_form.id.data=request.args.get('id')
+        alumn_form.nombre.data=alum1.nombre
+        alumn_form.apaterno.data=alum1.apaterno
+        alumn_form.email.data=alum1.email
+    if request.method=='POST':
+        id=alumn_form.id.data
+        alum=Alumnos.query.get(id)
+        db.session.delete(alum)
+        db.session.commit()
+        return redirect('ABC_Completo')
+    
+    return render_template("eliminar.html",form=alumn_form)
+
+@app.route("/modificar",methods=["GET","POST"])
+def modificar():
+    alumn_form=forms.UserForm2(request.form)
+    if request.method=='GET':
+        id=request.args.get('id')
+        alum1=db.session.query(Alumnos).filter(Alumnos.id==id).first()
+        alumn_form.id.data=request.args.get('id')
+        alumn_form.nombre.data=alum1.nombre
+        alumn_form.apaterno.data=alum1.apaterno
+        alumn_form.email.data=alum1.email
+    if request.method=='POST':
+        id=alumn_form.id.data
+        alum1=db.session.query(Alumnos).filter(Alumnos.id==id).first()
+        alum1.nombre=alumn_form.nombre.data
+        alum1.apaterno=alumn_form.apaterno.data
+        alum1.email=alumn_form.email.data
+        db.session.add(alum1)
+        db.session.commit()
+        return redirect('ABC_Completo')
+    
+    return render_template("modificar.html",form=alumn_form)
+
 @app.route("/ABC_Completo",methods=["GET","POST"])
 def ABC_Completo():
     alum_form=forms.UserForm2(request.form)
@@ -55,6 +96,7 @@ def alum():
         print("Apelllido materno  : {} ".format(ama)) 
     
     return render_template("alumnos.html",form=alum_form,nom=nom)
+
 
 if __name__=="__main__":
     csrf.init_app(app)
